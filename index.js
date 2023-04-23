@@ -3,7 +3,7 @@ const app = express();
 const cors = require("cors");
 require("dotenv").config();
 const connection = require("./database/connection");
-
+const PORT = 8080 || process.env.PORT;
 
 //Connect To Database
 connection();
@@ -15,7 +15,7 @@ app.disable("x-powered-by")// less Hackers know about your stack
 require("./routes/routes")(app);
 
 
-app.listen(8080, function () {
+app.listen(PORT, function () {
     console.log(`Server Running on http://localhost:${8080}`);
 });
 
