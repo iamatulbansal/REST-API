@@ -48,7 +48,7 @@ router.post("/login", async (req, res) => {
     if (!user) return res.status(404).send({ message: "Email & Password is wrong !" });
     //password decode / password is correct or not
     const validPassword = await bcrypt.compare(req.body.password, user.password)
-    if (!validPassword) res.status(404).send({ message: "Invalid password !" });
+    if (!validPassword) return res.status(404).send({ message: "Invalid password !" });
 
     //If all check passed then user is logged in
     res.status(200).send({ message: "User is logged in" })
