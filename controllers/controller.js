@@ -1,15 +1,40 @@
-const router = require("express").Router();
 const Jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-
 require("dotenv").config();
 const User = require("../models/User");
 const {
     registerValidation,
     loginValidation,
 } = require("../validation/user.validation");
+//USER
+/* 
+http://localhost:8080/api/users
+*/
+exports.users = async (req, res) => {
+    const users = await User.find();
+    res.json({
+        message: "success",
+        users,
+    });
+};
 
-router.post("/register", async (req, res) => {
+/////////////////////////////////////////////////////////////////
+//PROFILE
+/* 
+http://localhost:8080/api/user
+*/
+exports.profile = async (req, res) => {
+    const { name, email, date, _id } = await User.findOne({ _id: req.user._id });
+
+    res.json({ name, email, date, _id });
+};
+
+/////////////////////////////////////////////////////////////////
+//REGISTER-NEW-USER
+/* 
+http://localhost:8080/api/user/register
+*/
+exports.register = async (req, res) => {
     // VALIDATE THE DATA BEFORE WE CREATE NEW USER
 
     const { error } = registerValidation(req.body);
@@ -40,9 +65,13 @@ router.post("/register", async (req, res) => {
     } catch (error) {
         res.status(400).send(error);
     }
-});
+};
 
-router.post("/login", async (req, res) => {
+//LOGIN - USER
+/* 
+
+*/
+exports.login = async (req, res) => {
     //check user is validation using joi
     const { error } = loginValidation(req.body);
     if (error) return res.status(400).send(error.details[0].message);
@@ -59,6 +88,4 @@ router.post("/login", async (req, res) => {
 
     const token = Jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
     res.header("auth-token", token).send(token);
-});
-
-module.exports = router;
+}

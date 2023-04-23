@@ -2,21 +2,18 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 require("dotenv").config();
-const connection = require('./database/connection')
+const connection = require("./database/connection");
 
-const authRoute = require("./routes/auth");
-const profileRoute = require("./routes/profile");
-const usersRoute = require("./routes/users");
+
 //Connect To Database
-connection()
+connection();
 //Middleware
 app.use(express.json());
 app.use(cors({ origin: "*" }));
-
+app.disable("x-powered-by")// less Hackers know about your stack
 //Route Middleware
-app.use("/api/user", authRoute);
-app.use("/api/user", profileRoute);
-app.use("/api/users", usersRoute);
+require("./routes/routes")(app);
+
 
 app.listen(8080, function () {
     console.log(`Server Running on http://localhost:${8080}`);
