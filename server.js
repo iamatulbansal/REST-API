@@ -25,6 +25,7 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 const authRoute = require("./routes/auth");
 const profileRoute = require("./routes/profile");
+const usersRoute = require("./routes/users");
 
 // Connect to DB
 mongoose
@@ -42,6 +43,7 @@ app.use(express.json());
 //Route Middleware
 app.use("/api/user", authRoute);
 app.use("/api/user", profileRoute);
+app.use("/api/users", usersRoute);
 
 
 app.listen(8080, function () {
